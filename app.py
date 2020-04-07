@@ -1,6 +1,7 @@
+
 # GLOBAL VARIABLES
-play_board = ["-" for board in range(0,9)]
-current_player = "X"
+play_board = ["-" for play_board in range(0,9)]
+current_player = "X" #Starting player
 game_in_progress = True
 winner = None
 
@@ -10,43 +11,63 @@ def print_board():
           play_board[6] + " | " + play_board[7] + " | " + play_board[8])
 
 def play_game():
-
+    print_board()
     while game_in_progress:
-        check_if_win()
-        check_if_tie()
+        check_if_game_over()
         handle_turn(current_player)
-        print_board()      
+        check_if_game_over()
         flip_player()
 
-    if winner == "X":
-        print("Winner is " + winner)
-    elif winner == "O":
-        print("Winner is " + winner)
-    elif winner == "Tie":
-        print("!! TIE !!")
+    if not game_in_progress:
+        print("Gra skończona, wygrał gracz: " + winner)
 
 def handle_turn(player):
-    print("Teraz ruch gracza: " + player)
-    cell = int(input("Wpisz nr komórki 1-9: "))
-    cell = cell -1
 
+    print("Ruch gracza: " + player)
+    while True:
+        try:
+            cell = int(input("Wpisz nr pola 1-9: "))
+        except ValueError:
+            print("Nie wpisałeś liczby. Popraw się.")       
+        else:
+            if cell in range(10) and play_board[cell - 1] == "-":
+                break
+            else:
+                print("Cyfra nie w zakresie lub pole jest już pełne")
+    cell = cell - 1
     play_board[cell] = player
 
+  
+
+    print_board()
+
+def check_if_game_over():
+    global game_in_progress
+    global winner
+
+    row_1 = play_board[0] == play_board[1] == play_board[2] !="-"
+    row_2 = play_board[3] == play_board[4] == play_board[5] !="-"
+    row_3 = play_board[6] == play_board[7] == play_board[8] !="-"
+    
+    col_1 = play_board[0] == play_board[3] == play_board[6] !="-"
+    col_2 = play_board[1] == play_board[4] == play_board[7] !="-"
+    col_3 = play_board[2] == play_board[5] == play_board[8] !="-"
+
+    diag_1 = play_board[0] == play_board[4] == play_board[8] !="-"
+    diag_2 = play_board[6] == play_board[4] == play_board[2] !="-"
+
+    if row_1 or row_2 or row_3 or col_1 or col_2 or col_3 or diag_1 or diag_2:
+        game_in_progress = False
+        winner = current_player
+    
     return
 
 def flip_player():
-
     global current_player
 
     if current_player == "X":
-        current_player == "O"
-    else:
-        current_player == "X"      
-
-def check_if_win():
-    
-
-
-
+        current_player = "O"
+    elif current_player == "O":
+        current_player = "X"
 
 play_game()
