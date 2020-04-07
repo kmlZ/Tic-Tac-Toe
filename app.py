@@ -1,25 +1,31 @@
-
+from random import *
 # GLOBAL VARIABLES
 play_board = ["-" for play_board in range(0,9)]
 current_player = "X" #Starting player
 game_in_progress = True
-winner = None
+winner = "TBD"
 
 def print_board():
     print(play_board[0] + " | " + play_board[1] + " | " + play_board[2] + "\n" +
           play_board[3] + " | " + play_board[4] + " | " + play_board[5] + "\n" +
           play_board[6] + " | " + play_board[7] + " | " + play_board[8])
+        
 
 def play_game():
     print_board()
+    global game_in_progress
     while game_in_progress:
         check_if_game_over()
         handle_turn(current_player)
         check_if_game_over()
         flip_player()
 
-    if not game_in_progress:
-        print("Gra skończona, wygrał gracz: " + winner)
+    if not game_in_progress and winner != "TIE":
+        print("Gra skończona, wygrał: " + winner)
+    elif winner == "TIE":
+        print("REMIS")
+        game_in_progress = False
+    
 
 def handle_turn(player):
 
@@ -60,6 +66,12 @@ def check_if_game_over():
         game_in_progress = False
         winner = current_player
     
+    if "-" not in play_board:
+        winner = "TIE"
+        game_in_progress = False
+    
+
+    
     return
 
 def flip_player():
@@ -70,4 +82,13 @@ def flip_player():
     elif current_player == "O":
         current_player = "X"
 
+def get_random_player():
+    global current_player
+    random = randint(0,1)
+    if random == 0:
+        current_player = "X"
+    else:
+        current_player = "O"
+    return current_player
+get_random_player()
 play_game()
