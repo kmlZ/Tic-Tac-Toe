@@ -89,6 +89,5 @@ def get_random_player():
         current_player = "X"
     else:
         current_player = "O"
-    return current_player
 get_random_player()
 play_game()
